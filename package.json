@@ -1,7 +1,7 @@
 {
   "name": "reload-terminal",
   "displayName": "Reload Terminal",
-  "description": "Reload a terminal session in its original state",
+  "description": "Reload the active integrated terminal by splitting and closing the old pane",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.109.0"
@@ -14,18 +14,37 @@
   "contributes": {
     "commands": [
       {
-        "command": "reload-terminal.helloWorld",
-        "title": "Hello World"
+        "command": "reload-terminal.reload",
+        "title": "Reload Terminal",
+        "category": "Terminal",
+        "icon": "$(debug-restart)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "reload-terminal.reload",
+          "when": "view == terminal",
+          "group": "navigation@50"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "reload-terminal.reload",
+        "key": "ctrl+shift+r",
+        "when": "terminalFocus"
       }
     ]
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run package",
+    "vscode:prepublish": "pnpm run compile",
+    "build": "pnpm run compile",
     "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
     "watch": "npm-run-all -p watch:*",
     "watch:esbuild": "node esbuild.js --watch",
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
+    "package": "mkdir -p dist && pnpm dlx @vscode/vsce package --no-dependencies --out dist/reload-terminal.vsix",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
