@@ -1,71 +1,51 @@
-# reload-terminal README
+# reload-terminal
 
-This is the README for your extension "reload-terminal". After writing up a brief description, we recommend including the following sections.
+`reload-terminal` is a VS Code extension project focused on reloading terminal sessions in a predictable way.
 
-## Features
+## Current Status
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+This repository is in early development. The current command registration is a starter command:
 
-For example if there is an image subfolder under your extension project workspace:
+- Command ID: `reload-terminal.helloWorld`
+- Title: `Hello World`
 
-\!\[feature X\]\(images/feature-x.png\)
+## Goals
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- Reload a terminal session in its original state.
+- Keep the extension behavior simple and reliable.
+- Ship changes through an automated release flow using Release Please.
 
-## Requirements
+## Development
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Requirements:
 
-## Extension Settings
+- Node.js 22+
+- `pnpm`
+- VS Code 1.109.0+
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Install dependencies:
 
-For example:
+```bash
+pnpm install
+```
 
-This extension contributes the following settings:
+Useful scripts:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- `pnpm run compile` - Type-check, lint, and build.
+- `pnpm run watch` - Watch mode for TypeScript + esbuild.
+- `pnpm run lint` - Lint `src`.
+- `pnpm run test` - Run extension tests.
 
-## Known Issues
+## Release Process
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+This repo uses Conventional Commits with Release Please.
 
-## Release Notes
+- Use commit/PR titles like `feat: ...`, `fix: ...`, `chore: ...`.
+- Avoid non-conventional merge titles, or Release Please will skip creating a release PR.
+- Version updates are tracked in `package.json` and release artifacts.
 
-Users appreciate release notes as you update your extension.
+## Contributing
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- Keep changes small and reviewable.
+- Ensure commits follow Conventional Commits.
+- Update docs when behavior changes.
