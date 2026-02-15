@@ -1,0 +1,67 @@
+name: Release Please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release Please
+        id: release-please
+        uses: googleapis/release-please-action@v4.0.0
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - name: Dump Release Please outputs
+        if: ${{ always() }}
+        run: |
+          echo '${{ toJson(steps.release-please.outputs) }}'
+
+      - uses: actions/checkout@v4
+        if: ${{ steps.release-please.outputs.releases_created == 'true' }}
+
+      - uses: pnpm/action-setup@v4
+        if: ${{ steps.release-please.outputs.releases_created == 'true' }}
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        if: ${{ steps.release-please.outputs.releases_created == 'true' }}
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        if: ${{ steps.release-please.outputs.releases_created == 'true' }}
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build VSIX
+        if: ${{ steps.release-please.outputs.releases_created == 'true' }}
+        run: |
+          pnpm build
+          pnpm package
+
+      - name: Verify VSIX exists
+        if: ${{ steps.release-please.outputs.releases_created == 'true' }}
+        run: |
+          echo "Release tag: ${{ steps.release-please.outputs.tag_name }}"
+          ls -la dist || true
+          find . -maxdepth 6 -name "*.vsix" -print
+          test -f dist/reload-terminal.vsix
+
+      - name: Upload VSIX to Release
+        if: ${{ steps.release-please.outputs.releases_created == 'true' && steps.release-please.outputs.tag_name != '' }}
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.release-please.outputs.tag_name }}
+          files: dist/reload-terminal.vsix
+          fail_on_unmatched_files: true

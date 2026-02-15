@@ -1,26 +1,70 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+const SPLIT_WAIT_TIMEOUT_MS = 750;
+const SPLIT_WAIT_POLL_MS = 25;
+
+function waitForSplitTerminal(oldTerminal: vscode.Terminal): Promise<vscode.Terminal | undefined> {
+	return new Promise((resolve) => {
+		let settled = false;
+
+		const finish = (terminal: vscode.Terminal | undefined) => {
+			if (settled) {
+				return;
+			}
+			settled = true;
+			openedDisposable.dispose();
+			clearInterval(interval);
+			clearTimeout(timeout);
+			resolve(terminal);
+		};
+
+		const openedDisposable = vscode.window.onDidOpenTerminal((terminal) => {
+			if (terminal !== oldTerminal) {
+				finish(terminal);
+			}
+		});
+
+		const interval = setInterval(() => {
+			const active = vscode.window.activeTerminal;
+			if (active && active !== oldTerminal) {
+				finish(active);
+			}
+		}, SPLIT_WAIT_POLL_MS);
+
+		const timeout = setTimeout(() => {
+			const active = vscode.window.activeTerminal;
+			finish(active && active !== oldTerminal ? active : undefined);
+		}, SPLIT_WAIT_TIMEOUT_MS);
+	});
+}
+
 export function activate(context: vscode.ExtensionContext) {
+	const disposable = vscode.commands.registerCommand('reload-terminal.reload', async () => {
+		const oldTerminal = vscode.window.activeTerminal;
+		if (!oldTerminal) {
+			void vscode.window.showInformationMessage('No active terminal to reload.');
+			return;
+		}
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "reload-terminal" is now active!');
+		try {
+			const splitTerminalPromise = waitForSplitTerminal(oldTerminal);
+			await vscode.commands.executeCommand('workbench.action.terminal.split');
+			const splitTerminal = await splitTerminalPromise;
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('reload-terminal.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Reload Terminal!');
+			oldTerminal.dispose();
+
+			if (splitTerminal) {
+				splitTerminal.show(true);
+			}
+
+			await vscode.commands.executeCommand('workbench.action.terminal.focus');
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			void vscode.window.showErrorMessage(`Failed to reload terminal: ${message}`);
+		}
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}
