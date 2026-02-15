@@ -2,7 +2,7 @@
   "name": "reload-terminal",
   "displayName": "Reload Terminal",
   "description": "Reload a terminal session in its original state",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.109.0"
   },
