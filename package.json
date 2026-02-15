@@ -1,8 +1,8 @@
 {
   "name": "reload-terminal",
   "displayName": "Reload Terminal",
-  "description": "Reload the active integrated terminal by splitting and closing the old pane",
-  "version": "0.0.1",
+  "description": "Reload a terminal session in its original state",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.109.0"
   },
