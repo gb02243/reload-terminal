@@ -4,6 +4,13 @@ All notable changes to the "reload-terminal" extension will be documented in thi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.1.1](https://github.com/gb02243/reload-terminal/compare/reload-terminal-v1.1.0...reload-terminal-v1.1.1) (2026-02-16)
+
+
+### Bug Fixes
+
+* **release:** trigger release-please after non-conventional merge ([4694e16](https://github.com/gb02243/reload-terminal/commit/4694e16ed6d9f047d9f4ef5f66e584cab125cf87))
+
 ## [1.1.0](https://github.com/gb02243/reload-terminal/compare/reload-terminal-v1.0.0...reload-terminal-v1.1.0) (2026-02-15)
 
 
