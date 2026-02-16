@@ -3,7 +3,7 @@
   "publisher": "gbryant",
   "displayName": "Reload Terminal",
   "description": "Reload a terminal session in its original state",
-  "version": "1.2.0",
+  "version": "1.1.1",
   "engines": {
     "vscode": "^1.107.0"
   },
