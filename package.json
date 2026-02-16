@@ -1,10 +1,11 @@
 {
   "name": "reload-terminal",
+  "publisher": "gbryant",
   "displayName": "Reload Terminal",
   "description": "Reload a terminal session in its original state",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "engines": {
-    "vscode": "^1.109.0"
+    "vscode": "^1.107.0"
   },
   "categories": [
     "Other"
@@ -53,7 +54,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.109.0",
+    "@types/vscode": "^1.107.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "typescript-eslint": "^8.54.0",
